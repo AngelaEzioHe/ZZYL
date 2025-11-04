@@ -17,10 +17,15 @@
 
     <dependencies>
 
-        <!-- 通用工具-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.zzyl</groupId>
             <artifactId>zzyl-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>

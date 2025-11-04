@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.zzyl.common.core.domain.R;
+import com.zzyl.nursing.vo.NursingLevelVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,9 +29,9 @@ import com.zzyl.common.core.page.TableDataInfo;
 
 /**
  * 护理等级Controller
- * 
- * @author AngelaEzioHe
- * @date 2025-10-30
+ *
+ * @author alexis
+ * @date 2025-06-02
  */
 @Api("护理等级管理")
 @RestController
@@ -46,10 +47,10 @@ public class NursingLevelController extends BaseController
     @ApiOperation("查询护理等级列表")
     @PreAuthorize("@ss.hasPermi('nursing:level:list')")
     @GetMapping("/list")
-    public TableDataInfo<List<NursingLevel>> list(@ApiParam("查询条件对象") NursingLevel nursingLevel)
+    public TableDataInfo<List<NursingLevelVo>> list(@ApiParam("护理等级查询条件") NursingLevel nursingLevel)
     {
         startPage();
-        List<NursingLevel> list = nursingLevelService.selectNursingLevelList(nursingLevel);
+        List<NursingLevelVo> list = nursingLevelService.selectNursingLevelVoList(nursingLevel);
         return getDataTable(list);
     }
 
@@ -97,7 +98,7 @@ public class NursingLevelController extends BaseController
     @PreAuthorize("@ss.hasPermi('nursing:level:edit')")
     @Log(title = "护理等级", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody @ApiParam("修改的护理等级对象}") NursingLevel nursingLevel)
+    public AjaxResult edit(@RequestBody @ApiParam("修改的护理等级对象") NursingLevel nursingLevel)
     {
         return toAjax(nursingLevelService.updateNursingLevel(nursingLevel));
     }
@@ -108,9 +109,15 @@ public class NursingLevelController extends BaseController
     @ApiOperation("删除护理等级")
     @PreAuthorize("@ss.hasPermi('nursing:level:remove')")
     @Log(title = "护理等级", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable @ApiParam("要删除的护理等级ID}") Long[] ids)
+    @DeleteMapping("/{ids}")
+    public AjaxResult remove(@PathVariable @ApiParam("要删除的护理等级ID") Long[] ids)
     {
         return toAjax(nursingLevelService.deleteNursingLevelByIds(ids));
+    }
+
+    @GetMapping("/all")
+    public R<List<NursingLevel>> listAll()
+    {
+        return R.ok(nursingLevelService.listAll());
     }
 }

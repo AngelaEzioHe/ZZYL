@@ -2,7 +2,7 @@ package com.zzyl.common.constant;
 
 /**
  * 缓存的key 常量
- * 
+ *
  * @author ruoyi
  */
 public class CacheConstants
@@ -41,4 +41,44 @@ public class CacheConstants
      * 登录账户密码错误次数 redis key
      */
     public static final String PWD_ERR_CNT_KEY = "pwd_err_cnt:";
+
+    /**
+     * 护理等级缓存key
+     */
+    public static final Object NURSING_LEVEL_ALL_KEY = "nursingLevel:all";
+
+    /**
+     * 护理护理计划缓存key
+     */
+    public static final Object NURSING_PLAN_ALL_KEY = "nursingPlan:all";
+
+    /**
+     * 护理项目缓存key
+     */
+    public static final Object NURSING_PROJECT_ALL_KEY = "nursingProject:all";
+
+    /**
+     * 体检报告缓存key
+     */
+    public static final String HEALTH_REPORT = "healthReport";
+
+    /**
+     * 物联网平台产品列表缓存key
+     */
+    public static final String IOT_ALL_PRODUCT_LIST = "iot:all_product_list";
+
+    /**
+     * 物联网平台设备最新数据缓存key
+     */
+    public static final String IOT_DEVICE_LAST_DATA = "iot:device_last_data";
+
+    /**
+     * 报警触发次数缓存key
+     */
+    public static final String ALERT_TRIGGER_COUNT_PREFIX = "iot:alert_trigger_count:";
+
+    /**
+     * 报警沉默周期缓存key
+     */
+    public static final String ALERT_SILENT_PREFIX = "iot:alert_silent_prefix:";
 }
