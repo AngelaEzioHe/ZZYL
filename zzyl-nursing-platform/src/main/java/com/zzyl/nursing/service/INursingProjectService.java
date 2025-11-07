@@ -8,8 +8,8 @@ import com.zzyl.nursing.vo.NursingProjectVo;
 /**
  * 护理项目Service接口
  * 
- * @author AngelaEzioHe
- * @date 2025-10-30
+ * @author alexis
+ * @date 2025-06-02
  */
 public interface INursingProjectService extends IService<NursingProject>
 {
@@ -63,7 +63,7 @@ public interface INursingProjectService extends IService<NursingProject>
 
     /**
      * 查询所有护理项目
-     * @return 护理项目列表
+     * @return  护理项目列表
      */
     List<NursingProjectVo> getAll();
 }

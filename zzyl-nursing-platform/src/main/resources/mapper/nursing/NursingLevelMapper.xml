@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectNursingLevelList" parameterType="NursingLevel" resultMap="NursingLevelResult">
         <include refid="selectNursingLevelVo"/>
-        <where>
+        <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="planId != null "> and plan_id = #{planId}</if>
             <if test="fee != null "> and fee = #{fee}</if>
@@ -43,8 +43,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from nursing_level nl
         join nursing_plan np on nl.plan_id = np.id
         <where>
-            <if test="name != null and name != ''">and nl.name like concat('%',#{name},'%')</if>
-            <if test="status != null">and nl.status = #{status}</if>
+            <if test="name != null  and name != ''"> and nl.name like concat('%', #{name}, '%')</if>
+            <if test="status != null"> and nl.status = #{status}</if>
         </where>
     </select>
 

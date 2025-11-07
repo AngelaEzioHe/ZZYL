@@ -29,7 +29,7 @@ import com.zzyl.common.core.page.TableDataInfo;
 
 /**
  * 护理等级Controller
- *
+ * 
  * @author alexis
  * @date 2025-06-02
  */
@@ -109,15 +109,9 @@ public class NursingLevelController extends BaseController
     @ApiOperation("删除护理等级")
     @PreAuthorize("@ss.hasPermi('nursing:level:remove')")
     @Log(title = "护理等级", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ids}")
+	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable @ApiParam("要删除的护理等级ID") Long[] ids)
     {
         return toAjax(nursingLevelService.deleteNursingLevelByIds(ids));
-    }
-
-    @GetMapping("/all")
-    public R<List<NursingLevel>> listAll()
-    {
-        return R.ok(nursingLevelService.listAll());
     }
 }

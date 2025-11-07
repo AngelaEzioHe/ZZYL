@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author ruoyi
  */
-@ApiModel(value="实体类的基类")
+@ApiModel(value = "实体类的基类")
 public class BaseEntity implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -31,24 +31,24 @@ public class BaseEntity implements Serializable
 
     /** 创建者 */
     @ApiModelProperty(value = "创建者")
-    @TableField(fill= FieldFill.INSERT)
+    @TableField(fill = FieldFill.INSERT)
     private String createBy;
 
     /** 创建时间 */
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(fill= FieldFill.INSERT)
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     /** 更新者 */
     @ApiModelProperty(value = "更新者")
-    @TableField(fill= FieldFill.UPDATE)
+    @TableField(fill = FieldFill.UPDATE)
     private String updateBy;
 
     /** 更新时间 */
     @ApiModelProperty(value = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(fill= FieldFill.UPDATE)
+    @TableField(fill = FieldFill.UPDATE)
     private Date updateTime;
 
     /** 备注 */

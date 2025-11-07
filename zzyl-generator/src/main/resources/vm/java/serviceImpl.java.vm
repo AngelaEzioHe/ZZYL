@@ -81,7 +81,7 @@ public class ${ClassName}ServiceImpl extends ServiceImpl<${ClassName}Mapper, ${C
         return rows;
 #else
 ##        return ${className}Mapper.insert${ClassName}(${className});
-    return save(${className}) ? 1 : 0;
+        return save(${className}) ? 1 : 0;
 #end
     }
 

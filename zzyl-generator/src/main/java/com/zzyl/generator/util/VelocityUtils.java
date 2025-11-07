@@ -268,6 +268,7 @@ public class VelocityUtils
                 // 导入这个是为了格式化日期
                 importList.add("com.fasterxml.jackson.annotation.JsonFormat");
             }
+
             else if (!column.isSuperColumn() && GenConstants.TYPE_BIGDECIMAL.equals(column.getJavaType()))
             {
                 importList.add("java.math.BigDecimal");

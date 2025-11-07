@@ -31,8 +31,8 @@ import com.zzyl.common.core.page.TableDataInfo;
 /**
  * 护理计划Controller
  * 
- * @author AngelaEzioHe
- * @date 2025-10-30
+ * @author alexis
+ * @date 2025-06-02
  */
 @Api("护理计划管理")
 @RestController
@@ -99,7 +99,7 @@ public class NursingPlanController extends BaseController
     @PreAuthorize("@ss.hasPermi('nursing:plan:edit')")
     @Log(title = "护理计划", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody @ApiParam("修改的护理计划对象}") NursingPlanDto dto)
+    public AjaxResult edit(@RequestBody @ApiParam("修改的护理计划对象") NursingPlanDto dto)
     {
         return toAjax(nursingPlanService.updateNursingPlan(dto));
     }
@@ -111,8 +111,18 @@ public class NursingPlanController extends BaseController
     @PreAuthorize("@ss.hasPermi('nursing:plan:remove')")
     @Log(title = "护理计划", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{id}")
-    public AjaxResult remove(@PathVariable @ApiParam("要删除的护理计划ID}") Long id)
+    public AjaxResult remove(@PathVariable @ApiParam("要删除的护理计划ID") Long id)
     {
         return toAjax(nursingPlanService.deleteNursingPlanById(id));
+    }
+
+    /**
+     * 查询所有护理计划
+     */
+    @GetMapping("/all")
+    @ApiOperation(value = "获取所有护理计划")
+    public R<List<NursingPlan>> listAll()
+    {
+        return R.ok(nursingPlanService.getAllNursingPlans());
     }
 }

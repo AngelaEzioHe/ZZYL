@@ -30,8 +30,8 @@ import com.zzyl.common.core.page.TableDataInfo;
 /**
  * 护理项目Controller
  * 
- * @author AngelaEzioHe
- * @date 2025-10-30
+ * @author alexis
+ * @date 2025-06-02
  */
 @Api("护理项目管理")
 @RestController
@@ -98,7 +98,7 @@ public class NursingProjectController extends BaseController
     @PreAuthorize("@ss.hasPermi('nursing:project:edit')")
     @Log(title = "护理项目", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody @ApiParam("修改的护理项目对象}") NursingProject nursingProject)
+    public AjaxResult edit(@RequestBody @ApiParam("修改的护理项目对象") NursingProject nursingProject)
     {
         return toAjax(nursingProjectService.updateNursingProject(nursingProject));
     }
@@ -110,14 +110,14 @@ public class NursingProjectController extends BaseController
     @PreAuthorize("@ss.hasPermi('nursing:project:remove')")
     @Log(title = "护理项目", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable @ApiParam("要删除的护理项目ID}") Long[] ids)
+    public AjaxResult remove(@PathVariable @ApiParam("要删除的护理项目ID") Long[] ids)
     {
         return toAjax(nursingProjectService.deleteNursingProjectByIds(ids));
     }
 
     @GetMapping("/all")
     public AjaxResult getAll() {
-        List<NursingProjectVo> list=nursingProjectService.getAll();
-    	return AjaxResult.success(list);
+        List<NursingProjectVo> list = nursingProjectService.getAll();
+        return AjaxResult.success(list);
     }
 }

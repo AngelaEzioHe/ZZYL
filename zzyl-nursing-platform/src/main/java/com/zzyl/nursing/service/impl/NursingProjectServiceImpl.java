@@ -14,8 +14,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 /**
  * 护理项目Service业务层处理
  * 
- * @author AngelaEzioHe
- * @date 2025-10-30
+ * @author alexis
+ * @date 2025-06-02
  */
 @Service
 public class NursingProjectServiceImpl extends ServiceImpl<NursingProjectMapper, NursingProject> implements INursingProjectService
@@ -56,7 +56,7 @@ public class NursingProjectServiceImpl extends ServiceImpl<NursingProjectMapper,
     @Override
     public int insertNursingProject(NursingProject nursingProject)
     {
-    return save(nursingProject) ? 1 : 0;
+        return save(nursingProject) ? 1 : 0;
     }
 
     /**
@@ -95,8 +95,13 @@ public class NursingProjectServiceImpl extends ServiceImpl<NursingProjectMapper,
         return removeById(id) ? 1 : 0;
     }
 
+    /**
+     * 查询所有护理项目
+     *
+     * @return 护理项目列表
+     */
     @Override
-    public List<NursingProjectVo> getAll(){
+    public List<NursingProjectVo> getAll() {
         return nursingProjectMapper.getAll();
     }
 }

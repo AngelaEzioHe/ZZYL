@@ -3,6 +3,8 @@ package ${packageName}.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zzyl.common.core.domain.R;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -106,7 +108,7 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
     @Log(title = "${functionName}", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody @ApiParam("修改的${functionName}对象}") ${ClassName} ${className})
+    public AjaxResult edit(@RequestBody @ApiParam("修改的${functionName}对象") ${ClassName} ${className})
     {
         return toAjax(${className}Service.update${ClassName}(${className}));
     }
@@ -118,7 +120,7 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:remove')")
     @Log(title = "${functionName}", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{${pkColumn.javaField}s}")
-    public AjaxResult remove(@PathVariable @ApiParam("要删除的${functionName}ID}") ${pkColumn.javaType}[] ${pkColumn.javaField}s)
+    public AjaxResult remove(@PathVariable @ApiParam("要删除的${functionName}ID") ${pkColumn.javaType}[] ${pkColumn.javaField}s)
     {
         return toAjax(${className}Service.delete${ClassName}By${pkColumn.capJavaField}s(${pkColumn.javaField}s));
     }

@@ -1,21 +1,15 @@
 package com.zzyl.framework.interceptor;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.zzyl.common.core.domain.model.LoginUser;
 import com.zzyl.common.utils.DateUtils;
 import com.zzyl.common.utils.SecurityUtils;
-import io.netty.util.internal.ObjectUtil;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
-/**
- * @Author: EzioHe
- * @Date: 2025/10/24 04:37
- */
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
@@ -33,11 +27,12 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     }
 
     public Long getLoginUserId() {
-        //获取到当前登录人的信息
+        // 获取到当前登录人的信息
         LoginUser loginUser = SecurityUtils.getLoginUser();
         if (ObjectUtils.isNotEmpty(loginUser)) {
             return loginUser.getUserId();
         }
-        return 1L;
+    	return 1L;
     }
+
 }

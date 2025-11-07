@@ -9,8 +9,8 @@ import com.zzyl.nursing.vo.NursingPlanVo;
 /**
  * 护理计划Service接口
  * 
- * @author AngelaEzioHe
- * @date 2025-10-30
+ * @author alexis
+ * @date 2025-06-02
  */
 public interface INursingPlanService extends IService<NursingPlan>
 {
@@ -61,4 +61,11 @@ public interface INursingPlanService extends IService<NursingPlan>
      * @return 结果
      */
     public int deleteNursingPlanById(Long id);
+
+
+    /**
+     * 查询所有护理计划
+     * @return 护理计划列表
+     */
+    List<NursingPlan> getAllNursingPlans();
 }
