@@ -14,14 +14,22 @@ import java.util.Date;
 public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "createBy", String.class, String.valueOf(getLoginUserId()));
+        try {
+            this.strictInsertFill(metaObject, "createBy", String.class, String.valueOf(getLoginUserId()));
+        } catch (Exception e) {
+            this.strictInsertFill(metaObject, "createBy", String.class, "1");
+        }
         this.strictInsertFill(metaObject, "createTime", Date.class, DateUtils.getNowDate());
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
         this.setFieldValByName("updateTime", new Date(), metaObject);
-        this.setFieldValByName("updateBy", String.valueOf(getLoginUserId()), metaObject);
+        try {
+            this.setFieldValByName("updateBy", String.valueOf(getLoginUserId()), metaObject);
+        } catch (Exception e) {
+            this.setFieldValByName("updateBy", "1", metaObject);
+        }
 //        this.strictInsertFill(metaObject, "updateBy", String.class, String.valueOf(getLoginUserId()));
 //        this.strictUpdateFill(metaObject, "updateTime", Date.class, DateUtils.getNowDate());
     }

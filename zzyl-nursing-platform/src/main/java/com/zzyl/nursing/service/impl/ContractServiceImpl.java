@@ -1,7 +1,10 @@
 package com.zzyl.nursing.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.zzyl.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,5 +95,24 @@ public class ContractServiceImpl extends ServiceImpl<ContractMapper, Contract> i
     public int deleteContractById(Long id)
     {
         return removeById(id) ? 1 : 0;
+    }
+
+    /**
+     * 更新合同状态
+     */
+    @Override
+    public void updateContractStatus() {
+        //查询状态为0 且 合同开始时间<=当前时间 且 合同结束时间>=当前时间 的合同
+        List<Contract> list = list(Wrappers.<Contract>lambdaQuery()
+                .eq(Contract::getStatus, 0)
+                .le(Contract::getStartDate, LocalDateTime.now())
+                .ge(Contract::getEndDate, LocalDateTime.now()));
+
+        //修改状态为1
+        list.forEach(contract -> {
+            contract.setStatus(1);
+        });
+
+        updateBatchById(list);
     }
 }
