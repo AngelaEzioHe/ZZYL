@@ -2,9 +2,13 @@ package com.zzyl.nursing.service.impl;
 
 import java.util.Arrays;
 import java.util.List;
+
+import cn.hutool.core.util.ObjectUtil;
+import com.zzyl.common.constant.CacheConstants;
 import com.zzyl.common.utils.DateUtils;
 import com.zzyl.nursing.vo.NursingProjectVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.zzyl.nursing.mapper.NursingProjectMapper;
 import com.zzyl.nursing.domain.NursingProject;
@@ -22,6 +26,9 @@ public class NursingProjectServiceImpl extends ServiceImpl<NursingProjectMapper,
 {
     @Autowired
     private NursingProjectMapper nursingProjectMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 查询护理项目
@@ -56,7 +63,10 @@ public class NursingProjectServiceImpl extends ServiceImpl<NursingProjectMapper,
     @Override
     public int insertNursingProject(NursingProject nursingProject)
     {
-        return save(nursingProject) ? 1 : 0;
+        int result = save(nursingProject) ? 1 : 0;
+        // 删除护理项目缓存
+        deleteCache();
+        return result;
     }
 
     /**
@@ -68,7 +78,10 @@ public class NursingProjectServiceImpl extends ServiceImpl<NursingProjectMapper,
     @Override
     public int updateNursingProject(NursingProject nursingProject)
     {
-        return updateById(nursingProject) ? 1 : 0;
+        int result = updateById(nursingProject) ? 1 : 0;
+        // 删除护理项目缓存
+        deleteCache();
+        return result;
     }
 
     /**
@@ -80,7 +93,10 @@ public class NursingProjectServiceImpl extends ServiceImpl<NursingProjectMapper,
     @Override
     public int deleteNursingProjectByIds(Long[] ids)
     {
-        return removeByIds(Arrays.asList(ids)) ? 1 : 0;
+        int result = removeByIds(Arrays.asList(ids)) ? 1 : 0;
+        // 删除护理项目缓存
+        deleteCache();
+        return result;
     }
 
     /**
@@ -92,7 +108,17 @@ public class NursingProjectServiceImpl extends ServiceImpl<NursingProjectMapper,
     @Override
     public int deleteNursingProjectById(Long id)
     {
-        return removeById(id) ? 1 : 0;
+        int result = removeById(id) ? 1 : 0;
+        // 删除护理项目缓存
+        deleteCache();
+        return result;
+    }
+
+    /**
+     * 删除缓存
+     */
+    private void deleteCache() {
+        redisTemplate.delete(CacheConstants.NURSING_PROJECT_ALL_KEY);
     }
 
     /**
@@ -102,6 +128,19 @@ public class NursingProjectServiceImpl extends ServiceImpl<NursingProjectMapper,
      */
     @Override
     public List<NursingProjectVo> getAll() {
-        return nursingProjectMapper.getAll();
+        //从缓存中查询所有护理项目
+        List<NursingProjectVo> list = (List<NursingProjectVo>) redisTemplate.opsForValue().get(CacheConstants.NURSING_PROJECT_ALL_KEY);
+
+        //如果缓存中查到了，直接返回
+        if(ObjectUtil.isNotEmpty(list)){
+            return list;
+        }
+
+        //如果缓存中没有，从数据库中查询，并将结果放入缓存
+        list = nursingProjectMapper.getAll();
+
+        //将查询到的结果放入缓存
+        redisTemplate.opsForValue().set(CacheConstants.NURSING_PROJECT_ALL_KEY, list);
+        return list;
     }
 }
