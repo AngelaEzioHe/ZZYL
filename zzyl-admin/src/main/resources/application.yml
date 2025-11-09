@@ -140,3 +140,10 @@ aliyun:
 
 dept:
   nursingId: 201
+
+# 百度千帆大模型配置
+baidu:
+  qianfan:
+    apiKey: bce-v3/ALTAK-OwKFChKgxtezj4Gpp7WLr/4972336e6b978fdfa24d1eeda8079013b81b4f6c
+    baseUrl: https://qianfan.baidubce.com/v2/
+    model: ernie-4.0-8k

@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.zzyl.common.exception.base.BaseException;
 import com.zzyl.common.utils.CodeGenerator;
 import com.zzyl.common.utils.DateUtils;
-import com.zzyl.common.utils.IdCardUtils;
+import com.zzyl.common.utils.IDCardUtils;
 import com.zzyl.common.utils.bean.BeanUtils;
 import com.zzyl.nursing.domain.*;
 import com.zzyl.nursing.dto.CheckInApplyDto;
@@ -193,7 +193,7 @@ public class CheckInServiceImpl extends ServiceImpl<CheckInMapper, CheckIn> impl
         Elder elder = elderMapper.selectById(elderId);
         BeanUtils.copyProperties(elder, checkInElderVo);
         //从身份证号中获取老人年龄
-        checkInElderVo.setAge(IdCardUtils.getAgeByIdCard(elder.getIdCardNo()));
+        checkInElderVo.setAge(IDCardUtils.getAgeByIdCard(elder.getIdCardNo()));
         checkInDetailVo.setCheckInElderVo(checkInElderVo);
         
         //设置家属响应信息
