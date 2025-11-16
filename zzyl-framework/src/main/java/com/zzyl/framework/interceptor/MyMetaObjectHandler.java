@@ -6,32 +6,43 @@ import com.zzyl.common.core.domain.model.LoginUser;
 import com.zzyl.common.utils.DateUtils;
 import com.zzyl.common.utils.SecurityUtils;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
+
+    @Autowired
+    private HttpServletRequest request;
+
+    public boolean isExclude(){
+        String requestURI =request.getRequestURI();
+        if(requestURI.startsWith("/member")){
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void insertFill(MetaObject metaObject) {
-        try {
+        if(!isExclude()){
             this.strictInsertFill(metaObject, "createBy", String.class, String.valueOf(getLoginUserId()));
-        } catch (Exception e) {
-            this.strictInsertFill(metaObject, "createBy", String.class, "1");
         }
         this.strictInsertFill(metaObject, "createTime", Date.class, DateUtils.getNowDate());
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName("updateTime", new Date(), metaObject);
-        try {
+        if(!isExclude()){
             this.setFieldValByName("updateBy", String.valueOf(getLoginUserId()), metaObject);
-        } catch (Exception e) {
-            this.setFieldValByName("updateBy", "1", metaObject);
+        } else {
+            // 对于排除的路径(/member开头)，设置默认值或空值
+            this.setFieldValByName("updateBy", "", metaObject);
         }
-//        this.strictInsertFill(metaObject, "updateBy", String.class, String.valueOf(getLoginUserId()));
-//        this.strictUpdateFill(metaObject, "updateTime", Date.class, DateUtils.getNowDate());
+        this.strictUpdateFill(metaObject, "updateTime", Date.class, DateUtils.getNowDate());
     }
 
     public Long getLoginUserId() {
