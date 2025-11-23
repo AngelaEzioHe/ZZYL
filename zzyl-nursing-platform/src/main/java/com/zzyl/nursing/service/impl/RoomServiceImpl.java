@@ -1,12 +1,20 @@
 package com.zzyl.nursing.service.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzyl.common.constant.CacheConstants;
+import com.zzyl.common.utils.StringUtils;
 import com.zzyl.nursing.domain.Room;
 import com.zzyl.nursing.mapper.RoomMapper;
 import com.zzyl.nursing.service.IRoomService;
 import com.zzyl.nursing.vo.RoomVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import com.zzyl.nursing.service.IDeviceDataService;
+import com.zzyl.nursing.vo.DeviceInfo;
+import com.zzyl.nursing.domain.DeviceData;
+import com.zzyl.nursing.vo.BedVo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +29,12 @@ import java.util.List;
 public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IRoomService {
     @Autowired
     private RoomMapper roomMapper;
+
+    @Autowired
+    private IDeviceDataService deviceDataService;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 查询房间
@@ -88,7 +102,6 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IR
         return roomMapper.selectByFloorId(floorId);
     }
 
-
     /**
      * 获取所有房间（负责老人）
      *
@@ -111,5 +124,40 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IR
         return roomMapper.getRoomById(id);
     }
 
-
+    /**
+     * 根据楼层id获取房间中的智能设备及数据
+     *
+     * @param floorId 楼层id
+     * @return 结果
+     */
+    @Override
+    public List<RoomVo> getRoomsWithDeviceByFloorId(Long floorId) {
+//        redisTemplate.opsForHash().get(CacheConstants.IOT_DEVICE_LAST_DATA,"");
+        // SQL返回的数据是基础数据，找到的是房间、床位、设备（房间|床位）
+        List<RoomVo> roomVos = roomMapper.getRoomsWithDeviceByFloorId(floorId);
+        roomVos.forEach(roomVo -> {
+            // 遍历的是房间数据
+            List<DeviceInfo> deviceVos = roomVo.getDeviceVos();
+            // 房间设备所对应的设备上报的数据
+            deviceVos.forEach(deviceInfo -> {
+                String jsonStr = (String) redisTemplate.opsForHash().get(CacheConstants.IOT_DEVICE_LAST_DATA, deviceInfo.getIotId());
+                if(StringUtils.isEmpty(jsonStr)) {
+                    return; // 跳出本次循环，并不是结束方法
+                }
+                deviceInfo.setDeviceDataVos(JSONUtil.toList(jsonStr, DeviceData.class));
+            });
+            // 遍历的是床位数据
+            roomVo.getBedVoList().forEach(bedVo -> {
+                // 获取床位对应的设备列表
+                bedVo.getDeviceVos().forEach(deviceInfo -> {
+                    String jsonStr = (String) redisTemplate.opsForHash().get(CacheConstants.IOT_DEVICE_LAST_DATA, deviceInfo.getIotId());
+                    if(StringUtils.isEmpty(jsonStr)) {
+                        return; // 跳出本次循环，并不是结束方法
+                    }
+                    deviceInfo.setDeviceDataVos(JSONUtil.toList(jsonStr, DeviceData.class));
+                });
+            });
+        });
+        return roomVos;
+    }
 }

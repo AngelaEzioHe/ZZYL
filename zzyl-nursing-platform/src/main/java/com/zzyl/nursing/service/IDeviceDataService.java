@@ -33,6 +33,14 @@ public interface IDeviceDataService extends IService<DeviceData>
     public TableDataInfo selectDeviceDataList(DeviceDataPageReqDto dto);
 
     /**
+     * 根据物联网ID查询设备数据列表
+     * 
+     * @param iotId 物联网ID
+     * @return 设备数据集合
+     */
+    public List<DeviceData> selectDeviceDataListByIotId(String iotId);
+
+    /**
      * 新增设备数据
      * 
      * @param deviceData 设备数据
