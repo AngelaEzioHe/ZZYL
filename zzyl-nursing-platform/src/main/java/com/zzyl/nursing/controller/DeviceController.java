@@ -95,4 +95,10 @@ public class DeviceController extends BaseController
     public AjaxResult queryServiceProperties(@PathVariable String iotId) {
         return deviceService.queryServiceProperties(iotId);
     }
+
+    @ApiOperation("查询产品信息")
+    @GetMapping("/queryProduct/{productKey}")
+    public AjaxResult queryProduct(@PathVariable String productKey) {
+        return deviceService.queryProduct(productKey);
+    }
 }

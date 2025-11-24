@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
@@ -19,6 +19,7 @@ import com.zzyl.common.constant.CacheConstants;
 import com.zzyl.common.core.domain.AjaxResult;
 import com.zzyl.common.exception.base.BaseException;
 import com.zzyl.common.utils.DateTimeZoneConverter;
+import com.zzyl.common.utils.StringUtils;
 import com.zzyl.nursing.dto.DeviceDto;
 import com.zzyl.nursing.vo.DeviceDetailVo;
 import com.zzyl.nursing.vo.ProductVo;
@@ -286,4 +287,31 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         return AjaxResult.success(result);
     }
 
+    /**
+     * 查询产品详情
+     *
+     * @param productKey 产品KEY
+     */
+    @Override
+    public AjaxResult queryProduct(String productKey) {
+        //参数校验
+        if(StringUtils.isEmpty(productKey)){
+            throw new BaseException("产品KEY不能为空");
+        }
+        //调用华为云接口查询产品详情
+        ShowProductRequest showProductRequest = new ShowProductRequest();
+        showProductRequest.setProductId(productKey);
+        ShowProductResponse response;
+        try {
+            response = iotDAClient.showProduct(showProductRequest);
+        } catch (Exception e) {
+            throw new BaseException("查询产品详情失败");
+        }
+        //解析结果并判断结果中是否有所需的数据
+        List<ServiceCapability> serviceCapabilities = response.getServiceCapabilities();
+        if(CollUtil.isEmpty(serviceCapabilities)){
+            return AjaxResult.success(Collections.emptyList());
+        }
+        return AjaxResult.success(serviceCapabilities);
+    }
 }
